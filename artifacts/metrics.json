@@ -1,0 +1,57 @@
+{
+  "cv": {
+    "baseline_mean": {
+      "rmse": 115692,
+      "rmse_sd": 1326,
+      "mae": 91386,
+      "r2": -0.0006
+    },
+    "linear_regression": {
+      "rmse": 68239,
+      "rmse_sd": 1680,
+      "mae": 49204,
+      "r2": 0.6518
+    },
+    "knn": {
+      "rmse": 59991,
+      "rmse_sd": 598,
+      "mae": 40392,
+      "r2": 0.7309
+    },
+    "random_forest": {
+      "rmse": 50287,
+      "rmse_sd": 476,
+      "mae": 32783,
+      "r2": 0.8109
+    },
+    "gradient_boosting": {
+      "rmse": 46472,
+      "rmse_sd": 473,
+      "mae": 30537,
+      "r2": 0.8385
+    }
+  },
+  "test": {
+    "model": "gradient_boosting",
+    "n_train": 16512,
+    "n_test": 4128,
+    "rmse": 43673,
+    "mae": 29155,
+    "r2": 0.8537,
+    "median_abs_pct_error": 0.1127,
+    "rmse_uncapped_rows": 40645,
+    "frac_test_at_cap": 0.0438,
+    "rmse_reduction_vs_mean_baseline_cv": 0.5983
+  },
+  "permutation_importance_rmse_increase": {
+    "latitude": 55056,
+    "longitude": 51433,
+    "median_income": 38385,
+    "total_rooms": 31791,
+    "population": 23167,
+    "households": 18354,
+    "ocean_proximity": 15631,
+    "housing_median_age": 6020,
+    "total_bedrooms": 5555
+  }
+}

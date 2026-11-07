@@ -1,0 +1,19 @@
+{
+  "model": "gradient_boosting",
+  "trained_on": "california_housing_1990",
+  "test_rmse": 43673,
+  "test_r2": 0.8537,
+  "features": [
+    "longitude",
+    "latitude",
+    "housing_median_age",
+    "total_rooms",
+    "total_bedrooms",
+    "population",
+    "households",
+    "median_income",
+    "ocean_proximity"
+  ],
+  "sklearn_version": "1.9.1",
+  "python_version": "3.13.16"
+}
