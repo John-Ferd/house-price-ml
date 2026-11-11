@@ -4,54 +4,89 @@
       "rmse": 115692,
       "rmse_sd": 1326,
       "mae": 91386,
-      "r2": -0.0006
+      "r2": -0.0006,
+      "best_params": {}
     },
     "linear_regression": {
-      "rmse": 68239,
-      "rmse_sd": 1680,
-      "mae": 49204,
-      "r2": 0.6518
+      "rmse": 67246,
+      "rmse_sd": 1644,
+      "mae": 48456,
+      "r2": 0.6619,
+      "best_params": {}
     },
     "knn": {
-      "rmse": 59991,
-      "rmse_sd": 598,
-      "mae": 40392,
-      "r2": 0.7309
+      "rmse": 56686,
+      "rmse_sd": 874,
+      "mae": 37344,
+      "r2": 0.7597,
+      "best_params": {
+        "n_neighbors": 11,
+        "weights": "distance"
+      }
     },
     "random_forest": {
-      "rmse": 50287,
-      "rmse_sd": 476,
-      "mae": 32783,
-      "r2": 0.8109
+      "rmse": 43759,
+      "rmse_sd": 426,
+      "mae": 28043,
+      "r2": 0.8568,
+      "best_params": {
+        "max_features": 0.31468262992723717,
+        "min_samples_leaf": 1,
+        "n_estimators": 300
+      },
+      "model_file_mb": 93.9
     },
     "gradient_boosting": {
-      "rmse": 46472,
-      "rmse_sd": 473,
-      "mae": 30537,
-      "r2": 0.8385
+      "rmse": 44125,
+      "rmse_sd": 345,
+      "mae": 28275,
+      "r2": 0.8544,
+      "best_params": {
+        "l2_regularization": 0.002150056984681186,
+        "learning_rate": 0.03790954369066096,
+        "max_features": 0.5046783524282663,
+        "max_iter": 1070,
+        "max_leaf_nodes": 66,
+        "min_samples_leaf": 21
+      },
+      "model_file_mb": 1.6
+    },
+    "gradient_boosting_log": {
+      "rmse": 44815,
+      "rmse_sd": 552,
+      "mae": 27830,
+      "r2": 0.8498,
+      "best_params": {
+        "l2_regularization": 0.7333458125433298,
+        "learning_rate": 0.038943599353617415,
+        "max_features": 0.5915956810035584,
+        "max_iter": 744,
+        "max_leaf_nodes": 119,
+        "min_samples_leaf": 18
+      }
     }
   },
   "test": {
     "model": "gradient_boosting",
     "n_train": 16512,
     "n_test": 4128,
-    "rmse": 43673,
-    "mae": 29155,
-    "r2": 0.8537,
-    "median_abs_pct_error": 0.1127,
-    "rmse_uncapped_rows": 40645,
+    "rmse": 41300,
+    "mae": 26874,
+    "r2": 0.8692,
+    "median_abs_pct_error": 0.1001,
+    "rmse_uncapped_rows": 38414,
     "frac_test_at_cap": 0.0438,
-    "rmse_reduction_vs_mean_baseline_cv": 0.5983
+    "rmse_reduction_vs_mean_baseline_cv": 0.6186
   },
   "permutation_importance_rmse_increase": {
-    "latitude": 55056,
-    "longitude": 51433,
-    "median_income": 38385,
-    "total_rooms": 31791,
-    "population": 23167,
-    "households": 18354,
-    "ocean_proximity": 15631,
-    "housing_median_age": 6020,
-    "total_bedrooms": 5555
+    "latitude": 52776,
+    "longitude": 52669,
+    "total_rooms": 34184,
+    "median_income": 30724,
+    "population": 19610,
+    "households": 14507,
+    "total_bedrooms": 6397,
+    "housing_median_age": 4382,
+    "ocean_proximity": 3001
   }
 }

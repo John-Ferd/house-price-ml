@@ -1,0 +1,28 @@
+{
+  "model": "HistGradientBoostingRegressor",
+  "shap_units": "dollars",
+  "n_explained": 2000,
+  "mean_abs_shap": {
+    "median_income": 32376.0,
+    "rot45_u": 27287.0,
+    "population_per_household": 18250.0,
+    "dist_nearest_city_km": 15295.0,
+    "ocean_proximity=INLAND": 10753.0,
+    "rooms_per_household": 9804.0,
+    "latitude": 8032.0,
+    "dist_la_km": 7563.0,
+    "bedrooms_per_room": 7115.0,
+    "rot45_v": 3679.0,
+    "housing_median_age": 3396.0,
+    "longitude": 3330.0,
+    "dist_sf_km": 2892.0,
+    "total_rooms": 1328.0,
+    "households": 1164.0,
+    "total_bedrooms": 1119.0,
+    "population": 851.0,
+    "ocean_proximity=NEAR OCEAN": 555.0,
+    "ocean_proximity=NEAR BAY": 304.0,
+    "ocean_proximity=<1H OCEAN": 274.0,
+    "ocean_proximity=ISLAND": 0.0
+  }
+}

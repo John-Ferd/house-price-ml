@@ -20,10 +20,32 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from .data import CATEGORICAL, NUMERIC, OCEAN_CATEGORIES
 
 RATIOS = ["rooms_per_household", "bedrooms_per_room", "population_per_household"]
+GEO = ["dist_sf_km", "dist_la_km", "dist_nearest_city_km", "rot45_u", "rot45_v"]
+DERIVED = RATIOS + GEO
+
+# Approximate centres of the two big job markets (San Francisco, Los Angeles).
+SF = (37.7749, -122.4194)
+LA = (34.0522, -118.2437)
 
 
-class RatioFeatures(BaseEstimator, TransformerMixin):
-    """Add per-household ratio features; keep the original columns."""
+def haversine_km(lat, lon, lat0: float, lon0: float):
+    """Great-circle distance in km from each (lat, lon) to a fixed point."""
+    lat, lon = np.radians(lat), np.radians(lon)
+    lat0, lon0 = np.radians(lat0), np.radians(lon0)
+    a = np.sin((lat - lat0) / 2) ** 2 + np.cos(lat) * np.cos(lat0) * np.sin((lon - lon0) / 2) ** 2
+    return 2 * 6371.0 * np.arcsin(np.sqrt(a))
+
+
+class DerivedFeatures(BaseEstimator, TransformerMixin):
+    """Add per-household ratios and location features; keep the original columns.
+
+    Ratios: raw counts measure district size, ratios describe the houses.
+    Location: distance to the SF and LA job centres, and the coordinates rotated
+    by 45 degrees. Trees split on one axis at a time, so a diagonal boundary
+    such as the California coastline takes many splits in (lat, lon) but fewer
+    when the rotated axes are also available. All of these are fixed formulas
+    with nothing learned from data, so they cannot leak.
+    """
 
     def fit(self, X, y=None):
         return self
@@ -34,24 +56,29 @@ class RatioFeatures(BaseEstimator, TransformerMixin):
         X["rooms_per_household"] = X["total_rooms"] / hh
         X["bedrooms_per_room"] = X["total_bedrooms"] / X["total_rooms"].replace(0, np.nan)
         X["population_per_household"] = X["population"] / hh
+        X["dist_sf_km"] = haversine_km(X["latitude"], X["longitude"], *SF)
+        X["dist_la_km"] = haversine_km(X["latitude"], X["longitude"], *LA)
+        X["dist_nearest_city_km"] = np.minimum(X["dist_sf_km"], X["dist_la_km"])
+        X["rot45_u"] = (X["latitude"] + X["longitude"]) / np.sqrt(2)
+        X["rot45_v"] = (X["latitude"] - X["longitude"]) / np.sqrt(2)
         return X
 
     def get_feature_names_out(self, input_features=None):
-        return np.array(list(input_features or []) + RATIOS)
+        return np.array(list(input_features or []) + DERIVED)
 
 
 def build_preprocessor() -> Pipeline:
-    numeric = NUMERIC + RATIOS
+    numeric = NUMERIC + DERIVED
     columns = ColumnTransformer([
         ("num", Pipeline([("impute", SimpleImputer(strategy="median")),
                           ("scale", StandardScaler())]), numeric),
         ("cat", OneHotEncoder(categories=[OCEAN_CATEGORIES], handle_unknown="ignore"), CATEGORICAL),
     ])
-    return Pipeline([("ratios", RatioFeatures()), ("columns", columns)])
+    return Pipeline([("derived", DerivedFeatures()), ("columns", columns)])
 
 
 def feature_names() -> list[str]:
-    return NUMERIC + RATIOS + [f"ocean_proximity={c}" for c in OCEAN_CATEGORIES]
+    return NUMERIC + DERIVED + [f"ocean_proximity={c}" for c in OCEAN_CATEGORIES]
 
 
 def as_frame(records) -> pd.DataFrame:
