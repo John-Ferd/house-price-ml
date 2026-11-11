@@ -1,8 +1,16 @@
 {
   "model": "gradient_boosting",
+  "best_params": {
+    "l2_regularization": 0.002150056984681186,
+    "learning_rate": 0.03790954369066096,
+    "max_features": 0.5046783524282663,
+    "max_iter": 1070,
+    "max_leaf_nodes": 66,
+    "min_samples_leaf": 21
+  },
   "trained_on": "california_housing_1990",
-  "test_rmse": 43673,
-  "test_r2": 0.8537,
+  "test_rmse": 41300,
+  "test_r2": 0.8692,
   "features": [
     "longitude",
     "latitude",
@@ -15,5 +23,5 @@
     "ocean_proximity"
   ],
   "sklearn_version": "1.9.1",
-  "python_version": "3.13.16"
+  "python_version": "3.14.3"
 }
