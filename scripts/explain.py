@@ -26,6 +26,7 @@ from sklearn.compose import TransformedTargetRegressor
 from sklearn.model_selection import train_test_split
 
 from house_price.data import CATEGORICAL, NUMERIC, TARGET, load_housing
+from house_price.env import environment
 from house_price.features import feature_names
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,7 +56,7 @@ unit = "log(price)" if log_target else "dollars"
 importance = {names[i]: round(float(mean_abs[i]), 4 if log_target else 0) for i in order}
 (ROOT / "artifacts" / "shap_importance.json").write_text(json.dumps(
     {"model": type(tree_model).__name__, "shap_units": unit, "n_explained": len(X_te),
-     "mean_abs_shap": importance}, indent=2))
+     "mean_abs_shap": importance, "environment": environment()}, indent=2))
 for k, v in list(importance.items())[:8]:
     print(f"{k:28s} {v}")
 

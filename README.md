@@ -8,7 +8,7 @@ Predicting the median house value of California districts from 1990 census data.
 
 ## In one paragraph
 
-Each row is one census block group: its location, the age of its houses, room and population counts, the median household income, and how close it is to the ocean. The target is the median house value in dollars. I engineered per-household ratios and location features (distance to the San Francisco and Los Angeles job centres, and rotated coordinates), and put all preprocessing and the model into one scikit-learn `Pipeline`. Every model with hyperparameters was tuned by randomized search with 5-fold cross-validation on 80% of the data, and the winner was chosen by CV alone. On the held-out 20%, the tuned gradient-boosting model has **R² = 0.869** and **RMSE = $41,300**. The saved pipeline is served by a FastAPI endpoint that validates its input.
+Each row is one census block group: its location, the age of its houses, room and population counts, the median household income, and how close it is to the ocean. The target is the median house value in dollars. I engineered per-household ratios and location features (distance to the San Francisco and Los Angeles job centres, and rotated coordinates), and put all preprocessing and the model into one scikit-learn `Pipeline`. Every model with hyperparameters was tuned by randomized search with 5-fold cross-validation on 80% of the data, and the served model is the best by CV among those whose saved file fits a 25 MB size budget (explained below). On the held-out 20%, the tuned gradient-boosting model has **R² = 0.869** and **RMSE = $41,300**. The saved pipeline is served by a FastAPI endpoint that validates its input.
 
 ## Results
 
@@ -38,7 +38,7 @@ Each row is one census block group: its location, the age of its houses, room an
 - Gradient boosting cuts CV RMSE by **62%** compared with always predicting the mean.
 - Tuning plus the location features lowered test RMSE by **5.4%** relative to the earlier, untuned version of this repo.
 - The test score is close to the CV score, so the CV estimate wasn't optimistic.
-- Transparency note: while building this version, the random forest was first trained and scored on the test set before the size rule existed. Its test R² (0.866) was slightly *below* the served model's, so the size rule did not make the reported number look better.
+- Transparency note: while building this version, the random forest (the CV winner) was trained and scored on the test set before the size rule existed, and got R² 0.866. Because the rule then served gradient boosting instead, the reported test R² is 0.869, so the rule moved the headline number up by 0.003. That difference is negligible, but the rule was not fixed in advance of seeing a test score. It exists for deployment (the forest's file is 94 MB), not accuracy.
 - The tree models beat linear regression by a wide margin because price depends on location in a non-linear way: coastal vs inland, the Bay Area vs Los Angeles.
 
 <p align="center"><img src="artifacts/pred_vs_actual.png" width="45%"> <img src="artifacts/shap_summary.png" width="52%"></p>

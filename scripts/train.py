@@ -35,6 +35,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold, RandomizedSearchCV, cross_validate, train_test_split
 
 from house_price.data import CAP, CATEGORICAL, NUMERIC, TARGET, load_housing, synthetic_housing
+from house_price.env import environment
 from house_price.models import candidates, make_pipeline, search_space
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -124,7 +125,8 @@ importance = {k: round(float(v)) for k, v in importance}
 (ROOT / "models").mkdir(exist_ok=True)
 tag = "_synthetic" if args.synthetic else ""
 (ROOT / "artifacts" / f"metrics{tag}.json").write_text(json.dumps(
-    {"cv": results, "test": test, "permutation_importance_rmse_increase": importance}, indent=2))
+    {"cv": results, "test": test, "permutation_importance_rmse_increase": importance,
+     "environment": environment()}, indent=2))
 if args.synthetic:
     # CI / smoke run: keep the committed real-data model and plots untouched.
     print("synthetic run: metrics written to artifacts/metrics_synthetic.json; saved model left untouched")
