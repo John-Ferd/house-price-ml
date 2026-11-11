@@ -1,6 +1,10 @@
 # house-price-ml
 
+[![CI](https://github.com/John-Ferd/house-price-ml/actions/workflows/ci.yml/badge.svg)](https://github.com/John-Ferd/house-price-ml/actions/workflows/ci.yml) ![Python 3.11](https://img.shields.io/badge/python-3.11-blue)
+
 Predicting the median house value of California districts from 1990 census data. The project compares five scikit-learn models with cross-validation, saves the best one, and serves it through a small FastAPI service that runs in Docker. CI checks every push.
+
+> **Project history:** first built in 2025. In November 2026 it was rebuilt into a tested, reproducible package and published here, so the commit history starts then. All numbers in this README come from this published version.
 
 ## In one paragraph
 
@@ -42,6 +46,21 @@ Each row is one census block group: its location, the age of its houses, room an
 Location and income dominate, which matches intuition about housing prices.
 
 **The vertical stripe at $500,000** in the left plot is a data quirk. The census top-coded values at $500,001, so for 4.4% of test districts the true value is "$500,001 or more" and no model can know the real number. I kept those rows in the test set, because dropping them would make the numbers look better than they really are, and reported RMSE without them separately (above).
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A["housing.csv<br/>1990 California census"] --> S["80 / 20 split"]
+  S -->|"train 80%"| P["sklearn Pipeline<br/>impute → ratio features → scale + one-hot → model"]
+  P --> CV["5-fold CV<br/>5 candidate models"]
+  CV -->|"best: gradient boosting"| R["refit on all 80%"]
+  R --> J[("models/model.joblib")]
+  S -->|"test 20%, used once"| T["held-out metrics"]
+  R --> T
+  J --> API["FastAPI<br/>/predict · /health"]
+  API --> D["Docker image<br/>smoke-tested in CI"]
+```
 
 ## How it works
 
